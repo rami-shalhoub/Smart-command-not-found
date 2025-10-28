@@ -15,7 +15,6 @@ command_not_found_handler() {
 local cmd="$1"
 local found=false
 local sources=()
-local sep="${fg[cyan]}──────────────────────────────${reset_color}"
 
 echo "${fg[blue]}❌ Command '${fg[yellow]}$cmd${fg[blue]}' not found.${reset_color}"
 echo
@@ -38,7 +37,7 @@ echo "${fg[magenta]}🔍 Searching available package managers...${reset_color}"
 # ──────────────────────────────────────────────────────────
 
 # ─── APT ─────────────────────────────
-if command -v apt-cache &>/dev/null; then
+if command -v apt &>/dev/null; then
    local apt_result
    apt_result=$(apt-cache search "^${cmd}$" 2>/dev/null || apt-cache search "$cmd" 2>/dev/null)
    [ -n "$apt_result" ] && echo "  ${fg[green]}✔ Found in APT${reset_color}" && sources+=("APT::$apt_result") && found=true
@@ -95,8 +94,9 @@ if command -v nix-env &>/dev/null; then
    [ -n "$nix_result" ] && echo "  ${fg[green]}✔ Found in Nix${reset_color}" && sources+=("Nix::$nix_result") && found=true
 fi
 
-# ─── Results ─────────────────────────
-
+# ──────────────────────────────────────────────────────────
+#		Results  
+# ──────────────────────────────────────────────────────────
 $found || { echo "${fg[red]}No available sources found for '${cmd}'.${reset_color}"; return 127; }
 
 echo
@@ -125,38 +125,20 @@ for src in "${sources[@]}"; do
    done <<< "$data"
 done
 
-local line_count
+local line_count chosen
 line_count=$(echo -e "$package_list" | wc -l)
-local height
-
-# Dynamically adjust fzf height based on content and terminal size
-local term_height=$(tput lines)
-local min_height=8  # Minimum height in lines
-local max_lines=$(( term_height * 80 / 100 ))  # Max 80% of terminal height
-local content_lines=$(( line_count + 4 ))  # Add space for borders and prompts
-
-# Calculate ideal height in lines
-if (( content_lines < min_height )); then
-   content_lines=$min_height
-elif (( content_lines > max_lines )); then
-   content_lines=$max_lines
-fi
-
-# Convert to percentage of terminal height
-local pct=$(( content_lines * 100 / term_height ))
-height="${pct}%"
-
-# TODO: add dynamic number changing based on where the pointer is in the list e.g. 1/9 2/9 ...
-local chosen
-if command -v fzf &>/dev/null; then
-   package_list=$(echo -e "$package_list" | sed '/^[[:space:]]*$/d')
-   chosen=$(echo -e "$package_list" | fzf --ansi --prompt="📦 Select package to install: " \
-    --height="$height" --border --header="Results for '$cmd'")
-else
-   echo -e "$package_list"
-   echo -n "Enter the package name to install: "
-   read chosen
-fi
+package_list=$(echo -e "$package_list" | sed '/^[[:space:]]*$/d')
+chosen=$(echo -e "$package_list" | fzf --ansi \
+                                       --exact \
+                                       --border \
+                                       --prompt="📦 Select package to install: " \
+                                       --height=~$line_count% \
+                                       --min-height=12+ \
+                                       --footer="Results for '$cmd'" \
+                                       --cycle \
+                                       --wrap \
+                                       --highlight-line \
+                                       --info-command='echo "[$FZF_POS/$FZF_MATCH_COUNT]"')
 
 [[ -z "$chosen" ]] && { echo "${fg[red]}❌ No package selected.${reset_color}"; return 0; }
 

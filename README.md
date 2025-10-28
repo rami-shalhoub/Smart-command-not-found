@@ -12,8 +12,7 @@ I wanted a plugin that shows me all the available options when a command is not 
 
 ## **How to get it**
 
-1.  make sure you have [_Oh My Zh_](https://ohmyz.sh/) installed 
-    1.  install [fzf](https://junegunn.github.io/fzf/installation/)(optional)
+1.  make sure [_Oh My Zh_](https://ohmyz.sh/) and  [fzf](https://junegunn.github.io/fzf/installation/) are installed
 2.  clone the repository
     
     ```sh
@@ -27,6 +26,31 @@ I wanted a plugin that shows me all the available options when a command is not 
 
 ## **How it looks**
 
-<figure class="image image_resized image-style-block-align-left" style="width:45.79%;"><img style="aspect-ratio:854/413;" src="./pictures/Smart command not found_Sc.png" width="854" height="413"></figure>
-
-<img src="./pictures/1_Smart command not found_Sc.png" width="2000" height="681">
+<figure class="table" style="width:100%;">
+	<table class="ck-table-resized" style="border-style:none;">
+		<colgroup>
+			<col style="width:55.21%;">
+			<col style="width:44.79%;">
+		</colgroup>
+		<tbody>
+			<tr>
+				<td style="border-style:none;">
+					<p>
+						&nbsp;
+					</p>
+					<figure class="image image-style-block-align-left">
+						<img style="aspect-ratio:854/413;" src="./pictures/Smart command not found_Sc.png" width="854" height="413">
+					</figure>
+				</td>
+				<td style="border-style:none;">
+					<figure class="image image_resized" style="width:96.37%;">
+						<img style="aspect-ratio:1056/1037;" src="./pictures/1_Smart command not found_Sc.png" width="1056" height="1037">
+					</figure>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</figure>
+<p>
+	&nbsp;
+</p>
