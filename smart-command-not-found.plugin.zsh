@@ -35,6 +35,9 @@ echo "${fg[magenta]}🔍 Searching available package managers...${reset_color}"
 # ──────────────────────────────────────────────────────────
 #		Package Manager Searches  
 # ──────────────────────────────────────────────────────────
+# TODO: 1. Separate each package manager in different file to make the code readable and easier to maintain
+# TODO: 2. Check the possibility to add a config/yaml/tmol file to make it easier to select which package manager to check
+# + This will make the plugin faster by removing unexisted package managers
 
 # ─── APT ─────────────────────────────
 if command -v apt &>/dev/null; then
@@ -92,6 +95,15 @@ if command -v nix-env &>/dev/null; then
    local nix_result
    nix_result=$(nix-env -qaP "$cmd" 2>/dev/null | head -n 20)
    [ -n "$nix_result" ] && echo "  ${fg[green]}✔ Found in Nix${reset_color}" && sources+=("Nix::$nix_result") && found=true
+fi
+
+# ─── PIP ─────────────────────────────
+#^ currently not working because pip deprecated the search command 
+#^ I just wrote it in case they make it work again 
+if command -v pip &>/dev/null; then
+   local pip_results
+   pip_results=$(pip search "$cmd" 2>/dev/null | head -n 20)
+   [ -n "$pip_results" ] && echo "  ${fg[green]}✔ Found in Pip${reset_color}" && sources+=("Pip::$pip_result") && found=true
 fi
 
 # ──────────────────────────────────────────────────────────
@@ -184,6 +196,9 @@ case "$manager" in
         # Nix: "attribute.name package-name-version" → take attribute.name
         package=$(echo "$clean_chosen" | awk '{print $1}')
         ;;
+    Pip)
+        package=$(echo "$clean_chosen" | awk '{print $1}')
+        ;;
     *)
         # Fallback: take first word
         package=$(echo "$clean_chosen" | awk '{print $1}')
@@ -217,6 +232,7 @@ case "$manager" in
    Flatpak) flatpak install -y flathub "$package" ;;
    Snap) sudo snap install "$package" ;;
    Nix) nix-env -iA nixpkgs."$package" ;;
+   Pip) pip install "$package" ;;
    *) echo "${fg[red]}❌ Unsupported package manager: $manager${reset_color}" ;;
 esac
 }

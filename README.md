@@ -24,6 +24,16 @@ I wanted a plugin that shows me all the available options when a command is not 
     plugins=(... smart-command-not-found ...)
     ```
 
+## **Supported Package Managers**
+- APT ( and _nala_ if exist)
+- DNF
+- Pacman
+- Zypper
+- Homebrew
+- Flatpak
+- Snap
+- Nix
+
 ## **How it looks**
 
 <figure class="table" style="width:100%;">
