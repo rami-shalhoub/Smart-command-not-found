@@ -8,7 +8,7 @@ I wrote this plug in out of frustration from how the [command-not-found](https:/
 I wanted a plugin that shows me all the available options when a command is not found, so I included many package manager to check from so the plugin can work on multiple systems
 
 > [!NOTE]
-> If you didn't find a packager manager you are looking for please inform me or add it yourself and submit a pull request
+> If you didn't find the packager manager you are looking for please inform me or add it yourself and submit a pull request
 
 ## **How to get it**
 
@@ -23,16 +23,32 @@ I wanted a plugin that shows me all the available options when a command is not 
     ```plain
     plugins=(... smart-command-not-found ...)
     ```
+4. (Optional) specify the managers that you want the plugin to use, in `~/.zshrc` add
+   ```plain
+   export MANAGERS=('apt' 'flatpak' 'homebrew')
+   ```
 
 ## **Supported Package Managers**
-- APT ( and _nala_ if exist)
-- DNF
-- Pacman
-- Zypper
-- Homebrew
-- Flatpak
-- Snap
-- Nix
+- `apt` ( and _nala_ if exist)
+- `dnf`
+- `pacman`
+- _**aur**_:
+  - `yay`*
+  - `paru`*
+  - `aura`*
+- `zypper`*
+- `homebrew`
+- `flatpak`
+- `snap`*
+- `nix`*
+
+> [!CAUTION]
+> The _**aur**_ managers `yay` `paru` `aura` have an issue\
+> Please do not use them as they will not display any results
+
+> [!IMPORTANT]
+> The managers marked with **\*** are not (well) tested yet\
+> you can help improving the plugin by providing feedback if you are able to test them 
 
 ## **How it looks**
 
